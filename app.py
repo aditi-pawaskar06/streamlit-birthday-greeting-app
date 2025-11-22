@@ -1,3 +1,10 @@
+import streamlit as st  # 1️⃣ import the streamlit library
+import io
+import os
+from gtts import gTTS
+from PIL import Image, ImageDraw, 
+
+
 # --- simple password gate (optional) ---
 # set a password here, tell Darsh the password separately
 APP_PASSWORD = "darsh-bday"  # change this to something you choose
@@ -7,11 +14,6 @@ if pwd != APP_PASSWORD:
     st.stop()
 # ---------------------------------------
 
-import streamlit as st  # 1️⃣ import the streamlit library
-import io
-import os
-from gtts import gTTS
-from PIL import Image, ImageDraw, ImageFont
 
 HIS_NAME = "Darsh"
 ME = "Aditi"
