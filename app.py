@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw, ImageFont
 
 # --- simple password gate (optional) ---
 # set a password here, tell Darsh the password separately
-APP_PASSWORD = "darsh-bday"  # change this to something you choose
+APP_PASSWORD = "mine"  # change this to something you choose
 
 pwd = st.text_input("Enter the password to open this app:", type="password")
 if pwd != APP_PASSWORD:
@@ -28,8 +28,8 @@ st.set_page_config(
 # Header
 st.title(f"Happy Birthday {HIS_NAME}! 🎉")  
 st.write(
-    f"This is a small web app i built just for you using Python."
-    f"I'm still learning, but I wanted to make something special. 💙 — {ME}"
+    f"This is a small web app i built just for you using Python. "
+    f"I'm still learning, but I wanted to make something personal and special for you. 💙 — {ME}"
 )
 
 st.write("---")
@@ -37,13 +37,13 @@ st.write("---")
 st.header("My birthday message to you")
 message = st.text_area(
     "Write your message here: ",
-    value=f"Happy Birthday {HIS_NAME}! 🥳\n\nI’m so proud of you and I miss you a lot. — {ME}",
+    value=f"Happy Birthday {HIS_NAME}! 🥳\n\nI’m really proud of the person you are, and even more proud to have you in my life.\nI miss you — a little extra today. — {ME}",
     height = 150,
 )
 
 st.subheader("Preview of what he'll read:")
 st.success(message)
-st.write(f"{HIS_NAME}, you owe me a big hug for this app 😌")
+st.write("And yes… you definitely owe me a big hug for this 😌💙")
 
 # Gallerly of images
 st.write("---")
@@ -65,8 +65,9 @@ else:
 # Generate voice message
 st.write("---")
 default_tts_text = (
-    f"Happy Birthday {HIS_NAME}! You’re the warmest part of my world, even from miles away. I hope today feels gentle, special, and full of the love you deserve."
-    f"I miss you and I'm so proud of you. - {ME}"
+    f"Happy Birthday {HIS_NAME}! Even from miles away, you’re the part of my day that feels warm and steady. I hope today gives you the happiness, comfort, and love you truly deserve. "
+    f"I miss you, and "
+    f"I’m proud of you — more than you know. - {ME}"
 )
 
 tts_text = st.text_area(
@@ -99,7 +100,7 @@ st.header("Create and download a Birthday E-Card 🎂")
 
 # User inputs for the card
 card_headline = st.text_input("Card headline", value=f"Happy Birthday, {HIS_NAME}!")
-card_subtext = st.text_input("Card subtext", value=f"With love, {ME}")
+card_subtext = st.text_input("Card subtext", value=f"With all my love, Aditi, {ME}")
 card_width = st.slider("Card width (px)", 400, 1200, 900)
 card_height = st.slider("Card height (px)", 200, 900, 500)
 
@@ -145,7 +146,7 @@ if st.button("Create e-card"):
     bbox = draw.textbbox((0, 0), card_headline, font=font_head)
     w_head = bbox[2] - bbox[0]
     h_head = bbox[3] - bbox[1]
-    draw.text(((card_width - w_head) / 2, card_height * 0.15), card_headline, font=font_head, fill=(255, 230, 150))
+    draw.text(((card_width - w_head) / 2 + 50, card_height * 0.30), card_headline, font=font_head, fill=(255, 230, 150))
 
     # Draw subtext (centered near bottom-right area)
     bbox2 = draw.textbbox((0, 0), card_subtext, font=font_sub)
@@ -161,7 +162,7 @@ if st.button("Create e-card"):
             thumb_w = int(card_width * 0.28)
             im0.thumbnail((thumb_w, int(card_height * 0.5)))
             # Simple paste: place on left, vertically centered
-            paste_x = int(card_width * 0.06)
+            paste_x = int(card_width * 0.03)
             paste_y = int((card_height - im0.height) / 2)
             # If image has alpha, composite; otherwise paste directly
             if im0.mode == "RGBA":
