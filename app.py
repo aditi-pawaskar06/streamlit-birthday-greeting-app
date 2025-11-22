@@ -1,9 +1,9 @@
+
 import streamlit as st  # 1️⃣ import the streamlit library
 import io
 import os
 from gtts import gTTS
-from PIL import Image, ImageDraw, 
-
+from PIL import Image, ImageDraw, ImageFont
 
 # --- simple password gate (optional) ---
 # set a password here, tell Darsh the password separately
@@ -13,7 +13,6 @@ pwd = st.text_input("Enter the password to open this app:", type="password")
 if pwd != APP_PASSWORD:
     st.stop()
 # ---------------------------------------
-
 
 HIS_NAME = "Darsh"
 ME = "Aditi"
