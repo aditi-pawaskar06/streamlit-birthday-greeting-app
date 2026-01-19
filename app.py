@@ -1,53 +1,54 @@
 
-import streamlit as st  # 1️⃣ import the streamlit library
+import streamlit as st  
 import io
 import os
 from gtts import gTTS
 from PIL import Image, ImageDraw, ImageFont
 
-# --- simple password gate (optional) ---
-# set a password here, tell Darsh the password separately
-APP_PASSWORD = "mine"  # change this to something you choose
-
-pwd = st.text_input("Enter the password to open this app:", type="password")
-if pwd != APP_PASSWORD:
-    st.stop()
-# ---------------------------------------
-
-HIS_NAME = "Darsh"
-ME = "Aditi"
+# --- Configuration ---
 IMAGES_FOLDER = "images"
 VOICE_FILE = "birthday_voice.mp3"
 
+# Optional: Password protection (uncomment to enable)
+# APP_PASSWORD = "yourpassword"  # Change this to your chosen password
+# pwd = st.text_input("Enter the password to open this app:", type="password")
+# if pwd != APP_PASSWORD:
+#     st.stop()
+# ----------------------
+
 # Page Settings
 st.set_page_config(
-    page_title=f"Happy Birthday {HIS_NAME}!",  
+    page_title="Birthday Greeting App",  
     layout="centered"
 )
 
+# Sidebar for customization
+st.sidebar.header("Customize Your Greeting 🎨")
+recipient_name = st.sidebar.text_input("Birthday person's name:", value="Alex")
+your_name = st.sidebar.text_input("Your name:", value="Friend")
+
 # Header
-st.title(f"Happy Birthday {HIS_NAME}! 🎉")  
+st.title(f"Happy Birthday {recipient_name}! 🎉")  
 st.write(
-    f"This is a small web app i built just for you using Python. "
-    f"I'm still learning, but I wanted to make something personal and special for you. 💙 — {ME}"
+    f"A personalized birthday greeting web app built with Python and Streamlit. "
+    f"Customize the message, add photos, generate voice greetings, and create e-cards! 💙"
 )
 
 st.write("---")
 
-st.header("My birthday message to you")
+st.header("Birthday Message")
 message = st.text_area(
-    "Write your message here: ",
-    value=f"Happy Birthday {HIS_NAME}! 🥳\n\nI’m really proud of the person you are, and even more proud to have you in my life.\nI miss you — a little extra today. — {ME}",
+    "Write your personalized message here:",
+    value=f"Happy Birthday {recipient_name}! 🥳\n\nWishing you an amazing day filled with joy, laughter, and wonderful memories. You deserve all the happiness in the world!\n\nWith love,\n{your_name}",
     height = 150,
 )
 
-st.subheader("Preview of what he'll read:")
+st.subheader("Message Preview:")
 st.success(message)
-st.write("And yes… you definitely owe me a big hug for this 😌💙")
 
-# Gallerly of images
+# Gallery of images
 st.write("---")
-st.header("Some memories with you 💙")
+st.header("Photo Gallery 📸")
 
 images = []
 
@@ -58,16 +59,24 @@ if os.path.isdir(IMAGES_FOLDER):
             images.append(os.path.join(IMAGES_FOLDER, filename))
 
 if images:
-    st.image(images, width=300, caption=[os.path.basename(img) for img in images])
+    for i in range(0, len(images), 2):
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image(images[i])
+        if i + 1 < len(images):
+            with col2:
+                st.image(images[i + 1])
+        st.write("")  # Add space between rows
 else:
     st.info("Add some pictures into the 'images' folder to show them here.")
 
 # Generate voice message
 st.write("---")
+st.header("Voice Message Generator 🎤")
 default_tts_text = (
-    f"Happy Birthday {HIS_NAME}! Even from miles away, you’re the part of my day that feels warm and steady. I hope today gives you the happiness, comfort, and love you truly deserve. "
-    f"I miss you, and "
-    f"I’m proud of you — more than you know. - {ME}"
+    f"Happy Birthday {recipient_name}! Wishing you a fantastic day filled with joy, laughter, and all the things that make you smile. "
+    f"May this year bring you success, happiness, and wonderful memories. Have an amazing birthday! "
+    f"From {your_name}."
 )
 
 tts_text = st.text_area(
@@ -86,12 +95,11 @@ if st.button("Generate Voice Message 🎤"):
         audio_bytes = f.read()
     st.audio(audio_bytes)
 
-# st.write("Or, if you recorded your own voice, you can upload it here:")
-
-# uploaded = st.file_uploader("Upload a voice file (mp3/wav/m4a)", type=["mp3", "wav", "m4a"])
-# if uploaded is not None:
-#     st.success("Got your file! Playing it:")
-#     st.audio(uploaded.read())
+st.write("Or, if you recorded your own voice, you can upload it here:")
+uploaded = st.file_uploader("Upload a voice file (mp3/wav/m4a)", type=["mp3", "wav", "m4a"])
+if uploaded is not None:
+    st.success("Got your file! Playing it:")
+    st.audio(uploaded.read())
 
 # E-CARD Generator
 st.write("---")
@@ -99,8 +107,8 @@ st.header("Create and download a Birthday E-Card 🎂")
 
 
 # User inputs for the card
-card_headline = st.text_input("Card headline", value=f"Happy Birthday, {HIS_NAME}!")
-card_subtext = st.text_input("Card subtext", value=f"With all my love, Aditi, {ME}")
+card_headline = st.text_input("Card headline", value=f"Happy Birthday, {recipient_name}!")
+card_subtext = st.text_input("Card subtext", value=f"With love, {your_name}")
 card_width = st.slider("Card width (px)", 400, 1200, 900)
 card_height = st.slider("Card height (px)", 200, 900, 500)
 
@@ -177,18 +185,18 @@ if st.button("Create e-card"):
     card.save(buf, format="PNG")
     buf.seek(0)
 
-    st.image(buf, caption="E-card preview", use_column_width=True)
+    st.image(buf, caption="E-card preview")
     st.download_button("Download e-card (PNG)", data=buf, file_name="ecard.png", mime="image/png")
 
     
 
-# little interaction
+# Fun interaction
 st.write("---") 
-st.header("A little interaction part for you🎈")
+st.header("How are you feeling? 🎈")
 
 feeling = st.selectbox(
-    "How are you feeling while making this?",
-    ["excited", "shy", "nervous but happy", "super proud of myself"]
+    "What's your mood while creating this?",
+    ["Excited! 😄", "Happy and creative 🎨", "Thoughtful 💭", "Filled with love ❤️", "Super proud! 🌟"]
 )
 
-st.write(f"Right now, {ME} is feeling **{feeling}** while learning Python for you 💻.")
+st.write(f"{your_name} is feeling **{feeling}** while creating this special greeting!")
